@@ -21,6 +21,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
 	"testing"
 	"time"
@@ -79,6 +80,9 @@ func TestLifecycle(t *testing.T) {
 	defer deleteExportedReleaseBundle(t, tests.LcRbName2)
 	exportRb(t, tests.LcRbName3, number3)
 	defer deleteExportedReleaseBundle(t, tests.LcRbName3)
+
+	// Import the first time
+	importRb(t, tests.LcRbName2, number2)
 
 	// TODO Temporarily disabling till distribution on testing suite is stable.
 	/*
@@ -139,6 +143,19 @@ func exportRb(t *testing.T, rbName, rbVersion string) {
 	exists, err := fileutils.IsDirExists(rbName, false)
 	assert.NoError(t, err)
 	assert.Equal(t, true, exists)
+}
+
+func importRb(t *testing.T, rbName, rbVersion string) {
+	wd, err := os.Getwd()
+	assert.NoError(t, err)
+	exportedFileName := rbName + "-" + rbVersion + ".zip"
+	exportedFilePath := path.Join(wd, rbName, rbVersion, exportedFileName)
+	output := lcCli.RunCliCmdWithOutput(t, "rbi", exportedFilePath)
+	var importResp string
+	if !assert.NoError(t, json.Unmarshal([]byte(output), &importResp)) {
+		return
+	}
+	assert.Equal(t, "", importResp)
 }
 
 /*
