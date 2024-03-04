@@ -122,6 +122,7 @@ const (
 	ReleaseBundlePromote    = "release-bundle-promote"
 	ReleaseBundleDistribute = "release-bundle-distribute"
 	ReleaseBundleExport     = "release-bundle-export"
+	ReleaseBundleImport     = "release-bundle-import"
 
 	// Access Token Create commands keys
 	AccessTokenCreate = "access-token-create"
@@ -2004,6 +2005,8 @@ var commandFlags = map[string][]string{
 	ReleaseBundleExport: {
 		lcUrl, user, password, accessToken, serverId, lcDryRun, lcPathMappingTarget, lcPathMappingPattern, Project,
 		repository, symlinks, validateSymlinks, minSplit, splitCount, skipChecksum,
+	}, ReleaseBundleImport: {
+		lcUrl, user, password, accessToken, serverId, lcDryRun,
 	},
 	// Mission Control's commands
 	McConfig: {
