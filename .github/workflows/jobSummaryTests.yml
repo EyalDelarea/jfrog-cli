@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup JFrog CLI
-        uses: jfrog/setup-jfrog-cli@v4
+        uses: eyalDelarea/setup-jfrog-cli@reduce_timeout
         env:
           JF_URL: ${{ vars.JF_URL }}
           JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
@@ -29,14 +29,14 @@ jobs:
         run: |
           jf rt ping 
           
-      - name: Setup JFrog CLI2
-        uses: jfrog/setup-jfrog-cli@v4
-        env:
-          JF_URL: ${{ vars.JF_URL }}
-          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
-          JFROG_CLI_LOG_LEVEL: DEBUG
-        with:
-          custom-server-id: my-server2
+      # - name: Setup JFrog CLI2
+      #   uses: jfrog/setup-jfrog-cli@v4
+      #   env:
+      #     JF_URL: ${{ vars.JF_URL }}
+      #     JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+      #     JFROG_CLI_LOG_LEVEL: DEBUG
+      #   with:
+      #     custom-server-id: my-server2
 
       - name: rt ping
         run: |
