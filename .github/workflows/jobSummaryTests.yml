@@ -27,7 +27,7 @@ jobs:
 
       - name: rt ping
         run: |
-          jf rt ping
+          jf rt ping --server-id test1
           
       - name: Setup JFrog CLI2
         uses: jfrog/setup-jfrog-cli@v4
