@@ -30,7 +30,7 @@ jobs:
           jf rt ping 
           
       - name: Setup JFrog CLI2
-        uses: jfrog/setup-jfrog-cli@v4
+        uses: eyalDelarea/setup-jfrog-cli@fix_cleanup_servers
         env:
           JF_URL: ${{ vars.JF_URL }}
           JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
