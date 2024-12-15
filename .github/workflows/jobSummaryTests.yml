@@ -28,7 +28,16 @@ jobs:
       - name: rt ping
         run: |
           jf rt ping
+          
+      - name: Setup JFrog CLI2
+        uses: jfrog/setup-jfrog-cli@v4
+        env:
+          JF_URL: ${{ vars.JF_URL }}
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+          JFROG_CLI_LOG_LEVEL: DEBUG
+        with:
+          custom-server-id: my-server2
 
-      - name: Publish build info
+      - name: rt ping
         run: |
-          jf rt bce
+          jf rt ping
