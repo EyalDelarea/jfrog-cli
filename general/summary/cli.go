@@ -1,8 +1,10 @@
 package summary
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	buildInfo "github.com/jfrog/build-info-go/entities"
 	"github.com/jfrog/jfrog-cli-core/v2/artifactory/utils/commandsummary"
 	"github.com/jfrog/jfrog-cli-security/utils/results/output"
 	"github.com/jfrog/jfrog-cli/utils/cliutils"
@@ -206,6 +208,9 @@ func generateBuildInfoMarkdown() error {
 	if err = mapScanResults(); err != nil {
 		return fmt.Errorf("error mapping scan results: %w", err)
 	}
+	if err = mapArtifactsEvidences(); err != nil {
+		return fmt.Errorf("error mapping scan results: %w", err)
+	}
 	return buildInfoSummary.GenerateMarkdown()
 }
 
@@ -243,6 +248,25 @@ func mapScanResults() (err error) {
 			}
 		}
 	}
+	return
+}
+
+func mapArtifactsEvidences() (err error) {
+	// Init scan result map
+	indexedFiles, err := commandsummary.GetIndexedDataFilesPaths()
+	if err != nil {
+		return err
+	}
+	artifactsEvidencesMapping := indexedFiles[commandsummary.Evidence]
+	convertedMap := make(map[string]buildInfo.Artifact)
+	for key, value := range artifactsEvidencesMapping {
+		var artifact buildInfo.Artifact
+		if err := json.Unmarshal([]byte(value), &artifact); err != nil {
+			return err
+		}
+		convertedMap[key] = artifact
+	}
+	commandsummary.StaticMarkdownConfig.SetArtifactsEvidencesMapping(convertedMap)
 	return
 }
 
