@@ -3,9 +3,6 @@ on:
   push:
     branches:
       - '**'
-permissions:
-  contents: read
-  id-token: write
 jobs:
   JFrog-Job-Summary:
     strategy:
@@ -15,29 +12,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup JFrog CLI
-        uses: eyalDelarea/setup-jfrog-cli@fix_cleanup_servers
+        uses: jfrog/setup-jfrog-cli@v4
         env:
           JF_URL: ${{ vars.JF_URL }}
           JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
-          JFROG_CLI_LOG_LEVEL: DEBUG
-        with:
-          custom-server-id: my-server
 
-      - name: rt ping
+      - name: Generic build
         run: |
-          jf rt ping 
-          
-      - name: Setup JFrog CLI2
-        uses: eyalDelarea/setup-jfrog-cli@fix_cleanup_servers
-        env:
-          JF_URL: ${{ vars.JF_URL }}
-          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
-          JFROG_CLI_LOG_LEVEL: DEBUG
-        with:
-          custom-server-id: my-server2
-
-      - name: rt ping
+          jf rt u ./README.md generic-local-robi/ --module=generic-module
+      - name: Publish build info
         run: |
-          jf rt ping
+          jf rt bce
+          jf rt bp
